@@ -1,0 +1,27 @@
+#!/bin/bash -eu
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+BUILD=redhat-379
+
+case "$1" in
+  -v|--version)
+    version="$2"
+esac
+echo "$version" > "$OPENSHIFT_FUSE_DIR/env/OPENSHIFT_FUSE_VERSION"
+
+#Download and extract the Fuse Fabric Distribution
+mkdir -p $OPENSHIFT_FUSE_DIR
+cd $OPENSHIFT_FUSE_DIR
+
+# try public fuse repository and fallback to ea repository
+echo "!!!!!!!!!!!!!!!!!!!!!!!! unzip"
+unzip fabric8-karaf-1.0.0.${BUILD}.zip
+ln -s fabric8-karaf-1.0.0.${BUILD} container
+
+echo "!!!!!!!!!!!!!!!!!!!!!!!! mkdir"
+mkdir -p ./fabric8-karaf-1.0.0.redhat-379/data/maven/agent/io/fabric8/fabric-openshift/1.0.0.redhat-379
+echo "!!!!!!!!!!!!!!!!!!!!!!!! cp"
+cp fabric-openshift-1.0.0.redhat-379.jar fabric8-karaf-1.0.0.redhat-379/data/maven/agent/io/fabric8/fabric-openshift/1.0.0.redhat-379
+
+
